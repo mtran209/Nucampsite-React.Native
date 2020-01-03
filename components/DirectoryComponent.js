@@ -10,6 +10,7 @@ function Directory(props) {
                 title={item.name}
                 subtitle={item.description}
                 leftAvatar={{ source: require('./images/react-lake.jpg')}}
+                onPress={() => props.onPress(item.id)}
             />
         )
     };
