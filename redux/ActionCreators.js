@@ -1,7 +1,7 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
 
-export const fetchComments = () => dispatch => {
+export const fetchComments = () => dispatch => {  //this is a Thunk action creator that will return another action creator function, not an action itself
     return fetch(baseUrl + 'comments')
         .then(response => {
                 if (response.ok) {
@@ -152,3 +152,27 @@ export const addFavorite = campsiteId => ({
     type: ActionTypes.ADD_FAVORITE,
     payload: campsiteId
 });
+
+export const postComment = (campsiteId, rating, author, text) => dispatch => {  //Workshop week 2
+
+    console.log(campsiteId, rating, author, text);
+    
+    const newComment = {
+        campsiteId,
+        rating,
+        author,
+        text,
+        date: new Date().toISOString()
+    }
+
+    console.log(newComment);
+
+    setTimeout(() => {
+        dispatch(addComment(newComment));
+    }, 2000)
+};
+
+export const addComment = comment => ({
+    type: ActionTypes.ADD_COMMENT,
+    payload: comment
+})
