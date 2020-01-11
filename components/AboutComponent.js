@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import { ScrollView, FlatList, Text } from 'react-native';
-import { PARTNERS } from '../shared/partners';
 import { ListItem, Card } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { baseUrl } from '../shared/baseUrl'
+
+const mapStateToProps = state => {      // connecting the Redux Store's state to our props. Only connecting the state portion we need                                               which is partner:
+    return {
+        partners: state.partners
+    };
+};
 
 function Mission() {
     return (
@@ -15,13 +22,7 @@ function Mission() {
 }
 
 class About extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            partners: PARTNERS
-        }
-    }
+    
 
     static navigationOptions = {
         title: 'About Us'
@@ -34,7 +35,7 @@ class About extends Component {
                 <ListItem
                     title={item.name}
                     subtitle={item.description}
-                    leftAvatar={{ source: require('./images/bootstrap-logo.png')}}
+                    leftAvatar={{ source: {uri: baseUrl + item.image}}}
                     />
             )
         }
@@ -45,7 +46,7 @@ class About extends Component {
                 <Card
                     title='Community Partners'>
                     <FlatList
-                        data={this.state.partners}
+                        data={this.props.partners.partners}   // The first partners refers to the PARTNERS part of the state store (we stored the data in a partners section of the state and then we want to access the partners data portion from that section)
                         renderItem={renderPartner}
                         keyExtractor={item => item.id.toString()}
                     />
@@ -55,4 +56,4 @@ class About extends Component {
     }
 }
 
-export default About;
+export default connect(mapStateToProps)(About);  //this connects the About component's props to the partners state section we defined in the MapStateToProps function above.

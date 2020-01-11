@@ -8,7 +8,16 @@ import About from './AboutComponent';
 import Contact from './ContactComponent';
 import { Icon } from 'react-native-elements';
 import SafeAreaView from 'react-native-safe-area-view';
+import { connect } from 'react-redux';
+import { fetchCampsites, fetchComments, fetchPromotions, fetchPartners } from '../redux/ActionCreators'; // IMPORT OUr ACTION CREATORS HERE, the main component needs to update the state from Redux using these action creators. Trigger fetching of data from store
 
+
+const mapDispatchToProps = {  // THIS IS AN OBJECT - only the creators that have been THUNKED and will be used to fetch data from server, allows us to access these action creators as props.
+    fetchCampsites,
+    fetchComments,
+    fetchPartners,
+    fetchPromotions
+}
 
 const AboutNavigator = createStackNavigator(
     {
@@ -192,6 +201,13 @@ const MainNavigator = createDrawerNavigator(
 
 class Main extends Component {
 
+    componentDidMount() {                   // use this lifecycle function which will call these action creators after the component loads to populate our props with the Redux store data
+        this.props.fetchCampsites();
+        this.props.fetchComments();
+        this.props.fetchPartners();
+        this.props.fetchPromotions();
+    }
+
     render() {
         return (
             <View style={{
@@ -233,4 +249,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Main;
+export default connect(null, mapDispatchToProps)(Main); // we have null because we don't use mapStateToProps here but provide the 2nd argument mapDispatchToProps to connect it to the store so we can use our action creators
