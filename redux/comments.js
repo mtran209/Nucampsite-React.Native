@@ -11,8 +11,6 @@ export const comments = (state = { errMess: null, comments: []}, action) => {
         case ActionTypes.ADD_COMMENT:
             const comment = {...action.payload, id: state.comments.length}
             const comments = [...state.comments, comment]
-            console.log("trigggered");
-            
             return {...state, errMess: null, comments};
 
         default:
