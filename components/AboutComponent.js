@@ -4,6 +4,7 @@ import { ListItem, Card } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl'
 import Loading from './LoadingComponent';
+import * as Animatable from 'react-native-animatable';
 
 const mapStateToProps = state => {      // connecting the Redux Store's state to our props. Only connecting the state portion we need                                               which is partner:
     return {
@@ -23,21 +24,21 @@ function Mission() {
 }
 
 class About extends Component {
-    
+
 
     static navigationOptions = {
         title: 'About Us'
     }
 
     render() {
-        
-        const renderPartner = ({item}) => {
+
+        const renderPartner = ({ item }) => {
             return (
                 <ListItem
                     title={item.name}
                     subtitle={item.description}
-                    leftAvatar={{ source: {uri: baseUrl + item.image}}}
-                    />
+                    leftAvatar={{ source: { uri: baseUrl + item.image } }}
+                />
             )
         }
 
@@ -56,26 +57,30 @@ class About extends Component {
         if (this.props.partners.errMess) {
             return (
                 <ScrollView>
+                    <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+                        <Mission />
+                        <Card
+                            title='Community Partners'>
+                            <Text>{this.props.partners.errMess}</Text>
+                        </Card>
+                    </Animatable.View>
+                </ScrollView >
+            )
+        }
+
+        return (
+            <ScrollView>
+                <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
                     <Mission />
                     <Card
                         title='Community Partners'>
-                       <Text>{this.props.partners.errMess}</Text>
+                        <FlatList
+                            data={this.props.partners.partners}   // The first partners refers to the PARTNERS part of the state store (we stored the data in a partners section of the state and then we want to access the partners data portion from that section)
+                            renderItem={renderPartner}
+                            keyExtractor={item => item.id.toString()}
+                        />
                     </Card>
-                </ScrollView>
-            )
-        }
-        
-        return (
-            <ScrollView>
-                <Mission />
-                <Card
-                    title='Community Partners'>
-                    <FlatList
-                        data={this.props.partners.partners}   // The first partners refers to the PARTNERS part of the state store (we stored the data in a partners section of the state and then we want to access the partners data portion from that section)
-                        renderItem={renderPartner}
-                        keyExtractor={item => item.id.toString()}
-                    />
-                </Card>
+                </Animatable.View>
             </ScrollView>
         )
     }
